@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
-	"github.com/rs/cors"
 )
 
 type Game struct {
@@ -68,11 +66,6 @@ func main() {
 	mux.HandleFunc("GET /{game}/settings", middleware(settingsHandler))
 	mux.HandleFunc("POST /invalidate", withLogging(invalidateHandler))
 
-	handler := cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:9000"},
-		Debug:          true,
-	}).Handler(mux)
-
 	// OVER 9000 !!!
-	log.Fatal(http.ListenAndServe(":9000", handler))
+	log.Fatal(http.ListenAndServe(":9000", mux))
 }
